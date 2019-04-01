@@ -13,6 +13,10 @@ class AppService {
   getUrls(category, subCategory, start) {
     return data[category][subCategory].slice(start, start + 10);
   }
+
+  getUrlsLength(category, subCategory) {
+    return data[category][subCategory].length;
+  }
 }
 
 export default AppService;

@@ -11,6 +11,7 @@ class SelectWidget extends Component {
   constructor() {
     super();
 
+    // components local state
     this.state = {
       category: '',
       subCategory: '',
@@ -24,6 +25,7 @@ class SelectWidget extends Component {
     this.checkValidity = this.checkValidity.bind(this);
   }
 
+  // on change any of the select field, updating state by the select field's id
   onChange(event) {
     const targetId = event.target.id;
     const value = event.target.value;
@@ -36,6 +38,7 @@ class SelectWidget extends Component {
     
   }
 
+  // on submit event
   handleSubmit(event) {
     event.preventDefault();
     if (this.checkValidity()) {
@@ -44,6 +47,7 @@ class SelectWidget extends Component {
     
   }
 
+  // check validity of the form
   checkValidity() {
     if (!this.state.category) {
       this.setState({categoryValidationText: 'This field is required'});

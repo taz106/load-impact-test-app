@@ -5,10 +5,14 @@ import UrlList  from './components/list';
 import AppService from './service/AppService';
 
 class App extends Component {
+  listLength = 0;
+
   service = new AppService();
 
   constructor() {
     super();
+
+    // component's local state
     this.state = {
       categories: [],
       subCategories: [],
@@ -24,42 +28,48 @@ class App extends Component {
     this.onScrollEnd = this.onScrollEnd.bind(this);
   }
 
+  // initiazing category state
   componentDidMount() {
     this.setState({categories: this.service.getCategories()});
   }
 
+  // on selecting category
   onCategorySelect(category) {
     this.setState({subCategories: this.service.getSubCategories(category)});
   }
 
+  // onFormSubmit updating local state, getting new data and then againg updting local state
   onFormSubmit(formData) {
     const { category, subCategory } = formData;
     const startElement = 0;
 
     this.setState({category, subCategory, startElement}, () => {
       const urls = this.service.getUrls(this.state.category, this.state.subCategory, this.state.startElement);
+      this.listLength = this.service.getUrlsLength(this.state.category, this.state.subCategory);
 
       this.setState({urls});
     });
   }
 
+  // showing urlList if the state urls is not empty
   showUrlList() {
     if (this.state.urls.length) {
       return (
         <div>
           <UrlList urls={ this.state.urls }
             startElement = { this.state.startElement }
+            listLength = { this.listLength }
             onHandleScrollEnd={ this.onScrollEnd } />
         </div>
       )
     }
   }
 
+  // getting more data on scroll end
   onScrollEnd() {
     let { startElement } = this.state;
     startElement += 10;
     this.setState({startElement}, () => {
-      console.log(this.state);
       const urls = this.service.getUrls(this.state.category, this.state.subCategory, this.state.startElement);
       this.setState({urls});
     })
